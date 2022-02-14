@@ -7,42 +7,21 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 
 public class TableDemoApplication extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         TableView<Person> tableView = new TableView<>();
 
-        TableColumn<Person, String> firstNameColum = new TableColumn<>("First Name");
-        firstNameColum.setCellValueFactory(new PropertyValueFactory<Person, String>("firstname"));
-
-        TableColumn<Person, String> surNameColum = new TableColumn<>("Surname");
-        surNameColum.setCellValueFactory(new PropertyValueFactory<Person, String>("surname"));
-
-        TableColumn<Person, Integer> ageColum = new TableColumn<>("Age");
-        ageColum.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
+        setUpTableView(tableView);
 
 
-        tableView.getColumns().add(firstNameColum);
-        tableView.getColumns().add(surNameColum);
-        tableView.getColumns().add(ageColum);
-        tableView.setEditable(true);
-
-        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-
-        ObservableList<Person> pers = tableView.getItems();
-
-        pers.add(new Person("Roald", "Amundsen", 55));
-        pers.add(new Person("Fridtjof", "Nansen"));
-        pers.add(new Person("Otto", "Sverdrup"));
-        addAll(pers);
-
-
-
+        addTestContent(tableView);
 
 
         HBox hBox0 = new HBox();
@@ -50,8 +29,6 @@ public class TableDemoApplication extends Application {
         HBox hBox1 = gethBox1(tableView, hBox0);
 
         HBox hBox2 = gethBox2(tableView);
-
-
 
 
         VBox vbox = new VBox(tableView, hBox0, hBox1, hBox2);
@@ -62,6 +39,62 @@ public class TableDemoApplication extends Application {
         stage.setScene(scene);
         stage.setTitle("Explorer");
         stage.show();
+    }
+
+    private void setUpTableView(TableView<Person> tableView) {
+        TableColumn<Person, String> firstNameColum = new TableColumn<>("First Name");
+        firstNameColum.setCellValueFactory(new PropertyValueFactory<Person, String>("firstname"));
+        firstNameColum.setCellFactory(TextFieldTableCell.forTableColumn());
+        firstNameColum.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Person, String> event) {
+            System.out.println("----EditCommit()---- ");
+            Person p=event.getRowValue();
+            p.setFirstname(event.getNewValue());
+            }
+        });
+
+
+        TableColumn<Person, String> surNameColum = new TableColumn<>("Surname");
+        surNameColum.setCellValueFactory(new PropertyValueFactory<Person, String>("surname"));
+        surNameColum.setCellFactory(TextFieldTableCell.forTableColumn());
+        surNameColum.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Person, String> event) {
+                System.out.println("----EditCommit()---- ");
+                Person p=event.getRowValue();
+                p.setSurname(event.getNewValue());
+            }
+        });
+
+        TableColumn<Person, Integer> ageColum = new TableColumn<>("Age");
+        ageColum.setCellValueFactory(new PropertyValueFactory<Person, Integer>("age"));
+        ageColum.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        ageColum.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Person, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Person, Integer> event) {
+                System.out.println("----EditCommit()---- ");
+                Person p=event.getRowValue();
+                p.setAge(event.getNewValue());
+            }
+        });
+
+
+        tableView.getColumns().add(firstNameColum);
+        tableView.getColumns().add(surNameColum);
+        tableView.getColumns().add(ageColum);
+        tableView.setEditable(true);
+
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
+    private void addTestContent(TableView<Person> tableView) {
+        ObservableList<Person> pers = tableView.getItems();
+
+        pers.add(new Person("Roald", "Amundsen", 55));
+        pers.add(new Person("Fridtjof", "Nansen"));
+        pers.add(new Person("Otto", "Sverdrup"));
+        addAll(pers);
     }
 
     private HBox gethBox1(TableView<Person> tableView, HBox hBox0) {
@@ -91,7 +124,20 @@ public class TableDemoApplication extends Application {
                 tableView.getItems().removeAll(selected);
             }
         });
-        hBox1.getChildren().addAll(add, delete);
+        Button print = new Button("Ausdrucken");
+        print.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Button Print was clicked");
+                ObservableList all =tableView.getItems();
+                for (Object p:all
+                     ) {
+                    System.out.println(p.toString());
+
+                }
+            }
+        });
+        hBox1.getChildren().addAll(add, delete,print);
         return hBox1;
     }
 

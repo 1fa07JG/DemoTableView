@@ -10,6 +10,15 @@ public class Person {
         this.surname = surname;
     }
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
     public int getAge() {
         return age;
     }
