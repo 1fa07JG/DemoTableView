@@ -49,8 +49,7 @@ public class TableDemoApplication extends Application {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> event) {
             System.out.println("----EditCommit()---- ");
-            Person p=event.getRowValue();
-            p.setFirstname(event.getNewValue());
+            event.getRowValue().setFirstname(event.getNewValue());
             }
         });
 
@@ -62,8 +61,7 @@ public class TableDemoApplication extends Application {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> event) {
                 System.out.println("----EditCommit()---- ");
-                Person p=event.getRowValue();
-                p.setSurname(event.getNewValue());
+                event.getRowValue().setSurname(event.getNewValue());
             }
         });
 
