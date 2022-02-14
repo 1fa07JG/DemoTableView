@@ -1,12 +1,27 @@
-package app;
+package com.example.demotableview;
 
 public class Person {
     String firstname;
     String surname;
+    int age;
 
     public Person(String firstname, String surname) {
         this.firstname = firstname;
         this.surname = surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Person(String firstname, String surname, int age) {
+        this.firstname = firstname;
+        this.surname = surname;
+        this.age = age;
     }
 
     public Person() {
