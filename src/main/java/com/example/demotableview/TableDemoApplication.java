@@ -12,8 +12,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+
+import java.time.LocalDateTime;
 
 public class TableDemoApplication extends Application {
     @Override
@@ -26,6 +29,19 @@ public class TableDemoApplication extends Application {
         ObservableList<Person> pers = tableView.getItems();
         pers.addListener(createChangeListener());
         addTestContent(pers);
+        TableView.TableViewSelectionModel<Person> selectionModel = tableView.getSelectionModel();
+        ObservableList<Person> selectedItems = tableView.getSelectionModel().getSelectedItems();
+        selectedItems.addListener(new ListChangeListener<Person>() {
+            @Override
+            public void onChanged(Change<? extends Person> change) {
+                System.out.println(tableView.getSelectionModel().getSelectedIndices().size()+" Ausgewählt");
+                if (tableView.getSelectionModel().getSelectedIndices().size() > 3) {
+                    System.out.println("zu viele ausgewählt");
+                    showAlert(tableView.getSelectionModel().getSelectedIndices().size());
+                }
+
+            }
+        });
 
 
         HBox hBox0 = new HBox();
@@ -43,6 +59,13 @@ public class TableDemoApplication extends Application {
         stage.setScene(scene);
         stage.setTitle("Explorer");
         stage.show();
+    }
+
+    private static void showAlert(int ausgewhält) {
+        String message = "Zu viele Personen ausgewählt! Es sind Momentan " + ausgewhält+" Ausgewählt\nEs dürfen Maximal drei Personen ausgewählt werden";
+        Alert a = new Alert(Alert.AlertType.WARNING, message);
+        a.initModality(Modality.NONE);
+        a.show();
     }
 
     private ListChangeListener<Person> createChangeListener() {
