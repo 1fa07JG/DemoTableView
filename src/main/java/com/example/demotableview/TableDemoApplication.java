@@ -16,7 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
-import java.time.LocalDateTime;
+import java.util.Comparator;
 
 public class TableDemoApplication extends Application {
     @Override
@@ -37,7 +37,7 @@ public class TableDemoApplication extends Application {
                 System.out.println(tableView.getSelectionModel().getSelectedIndices().size()+" Ausgewählt");
                 if (tableView.getSelectionModel().getSelectedIndices().size() > 3) {
                     System.out.println("zu viele ausgewählt");
-                    showAlert(tableView.getSelectionModel().getSelectedIndices().size());
+                    showToMuchSelectedAlert(tableView.getSelectionModel().getSelectedIndices().size());
                 }
 
             }
@@ -61,7 +61,7 @@ public class TableDemoApplication extends Application {
         stage.show();
     }
 
-    private static void showAlert(int ausgewhält) {
+    private static void showToMuchSelectedAlert(int ausgewhält) {
         String message = "Zu viele Personen ausgewählt! Es sind Momentan " + ausgewhält+" Ausgewählt\nEs dürfen Maximal drei Personen ausgewählt werden";
         Alert a = new Alert(Alert.AlertType.WARNING, message);
         a.initModality(Modality.NONE);
@@ -146,8 +146,8 @@ public class TableDemoApplication extends Application {
 
 
         pers.add(new Person("Roald", "Amundsen", 55));
-        pers.add(new Person("Fridtjof", "Nansen"));
-        pers.add(new Person("Otto", "Sverdrup"));
+        pers.add(new Person("Fridtjof", "Nansen",60));
+        pers.add(new Person("Otto", "Sverdrup",44));
         addMultiple(pers);
     }
 
@@ -178,6 +178,18 @@ public class TableDemoApplication extends Application {
                 tableView.getItems().removeAll(selected);
             }
         });
+        Button sort = new Button("Sortieren");
+
+        sort.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                System.out.println("Button Sort was clicked");
+                ObservableList selected = tableView.getSelectionModel().getSelectedCells();
+                selected.sort
+                tableView.getItems().removeAll(selected);
+                tableView.getItems().addAll(selected);
+            }
+        });
         Button print = new Button("Ausdrucken");
         print.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -191,7 +203,7 @@ public class TableDemoApplication extends Application {
                 }
             }
         });
-        hBox1.getChildren().addAll(add, delete, print);
+        hBox1.getChildren().addAll(add, delete, print,sort);
         return hBox1;
     }
 
@@ -224,18 +236,18 @@ public class TableDemoApplication extends Application {
 
     public void addMultiple(ObservableList<Person> pers) {
         ObservableList<Person> tempPers = FXCollections.observableArrayList();
-        tempPers.add(new Person("Robert", "Pery"));
-        tempPers.add(new Person("John", "Franklin"));
-        tempPers.add(new Person("James", "Ross"));
-        tempPers.add(new Person("Robert", "Scott"));
-        tempPers.add(new Person("Umberto", "Noblie"));
-        tempPers.add(new Person("Fredrick", "Cook"));
-        tempPers.add(new Person("Adrian", "Gerlache"));
-        tempPers.add(new Person("Ernest", "Shackelton"));
-        tempPers.add(new Person("Olav", "Bjaaland", 70));
-        tempPers.add(new Person("Helmer", "Hanssen"));
-        tempPers.add(new Person("Sverre", "Hassel"));
-        tempPers.add(new Person("Oscar", "Wisting"));
+        tempPers.add(new Person("Robert", "Pery",52));
+        tempPers.add(new Person("John", "Franklin",61));
+        tempPers.add(new Person("James", "Ross",39));
+        tempPers.add(new Person("Robert", "Scott",43));
+        tempPers.add(new Person("Umberto", "Noblie",41));
+        tempPers.add(new Person("Fredrick", "Cook",42));
+        tempPers.add(new Person("Adrian", "Gerlache",32));
+        tempPers.add(new Person("Ernest", "Shackelton",33));
+        tempPers.add(new Person("Olav", "Bjaaland", 38));
+        tempPers.add(new Person("Helmer", "Hanssen",41));
+        tempPers.add(new Person("Sverre", "Hassel",35));
+        tempPers.add(new Person("Oscar", "Wisting",41));
         pers.addAll(tempPers);
     }
 }
