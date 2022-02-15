@@ -1,6 +1,8 @@
 package com.example.demotableview;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,10 +20,12 @@ public class TableDemoApplication extends Application {
     public void start(Stage stage) {
         TableView<Person> tableView = new TableView<>();
 
+
         setUpTableView(tableView);
 
-
-        addTestContent(tableView);
+        ObservableList<Person> pers = tableView.getItems();
+        pers.addListener(createChangeListener());
+        addTestContent(pers);
 
 
         HBox hBox0 = new HBox();
@@ -41,6 +45,35 @@ public class TableDemoApplication extends Application {
         stage.show();
     }
 
+    private ListChangeListener<Person> createChangeListener() {
+        return new ListChangeListener<Person>() {
+            @Override
+            public void onChanged(Change<? extends Person> c) {
+                while (c.next()) {
+                    if (c.wasAdded()) {
+
+                        boolean one = c.getAddedSize() == 1;
+                        System.out.print("Es wurde" + (one ? "" : "n") + " " + (one ? "ein" : c.getAddedSize()) + " Element" + (one ? "" : "e") + " hinzugefügt\n");
+                    }
+                    if (c.wasReplaced()) {
+                        System.out.print(" etwas Ersetzt\n");
+                    }
+                    if (c.wasRemoved()) {
+                        boolean one = c.getRemovedSize() == 1;
+                        System.out.print("Es wurde" + (one ? "" : "n") + " " + (one ? "ein" : c.getRemovedSize()) + " Element" + (one ? "" : "e") + " entfernt\n");
+                    }
+                    if (c.wasUpdated()) {
+                        System.out.print(" etwas Aktualisiert\n");
+                    }
+                    if (c.wasPermutated()) {
+                        System.out.print(" etwas Kombiniert\n");
+                    }
+                }
+            }
+        };
+    }
+
+
     private void setUpTableView(TableView<Person> tableView) {
         TableColumn<Person, String> firstNameColum = new TableColumn<>("First Name");
         firstNameColum.setCellValueFactory(new PropertyValueFactory<Person, String>("firstname"));
@@ -48,8 +81,8 @@ public class TableDemoApplication extends Application {
         firstNameColum.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Person, String>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, String> event) {
-            System.out.println("----EditCommit()---- ");
-            event.getRowValue().setFirstname(event.getNewValue());
+                System.out.println("----EditCommit()---- ");
+                event.getRowValue().setFirstname(event.getNewValue());
             }
         });
 
@@ -72,7 +105,7 @@ public class TableDemoApplication extends Application {
             @Override
             public void handle(TableColumn.CellEditEvent<Person, Integer> event) {
                 System.out.println("----EditCommit()---- ");
-                Person p=event.getRowValue();
+                Person p = event.getRowValue();
                 p.setAge(event.getNewValue());
             }
         });
@@ -86,13 +119,13 @@ public class TableDemoApplication extends Application {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-    private void addTestContent(TableView<Person> tableView) {
-        ObservableList<Person> pers = tableView.getItems();
+    private void addTestContent(ObservableList<Person> pers) {
+
 
         pers.add(new Person("Roald", "Amundsen", 55));
         pers.add(new Person("Fridtjof", "Nansen"));
         pers.add(new Person("Otto", "Sverdrup"));
-        addAll(pers);
+        addMultiple(pers);
     }
 
     private HBox gethBox1(TableView<Person> tableView, HBox hBox0) {
@@ -127,15 +160,15 @@ public class TableDemoApplication extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("Button Print was clicked");
-                ObservableList all =tableView.getItems();
-                for (Object p:all
-                     ) {
+                ObservableList all = tableView.getItems();
+                for (Object p : all
+                ) {
                     System.out.println(p.toString());
 
                 }
             }
         });
-        hBox1.getChildren().addAll(add, delete,print);
+        hBox1.getChildren().addAll(add, delete, print);
         return hBox1;
     }
 
@@ -166,18 +199,20 @@ public class TableDemoApplication extends Application {
         launch();
     }
 
-    public void addAll(ObservableList<Person> pers) {
-        pers.add(new Person("Robert", "Pery"));
-        pers.add(new Person("John", "Franklin"));
-        pers.add(new Person("James", "Ross"));
-        pers.add(new Person("Robert", "Scott"));
-        pers.add(new Person("Umberto", "Noblie"));
-        pers.add(new Person("Fredrick", "Cook"));
-        pers.add(new Person("Adrian", "Gerlache"));
-        pers.add(new Person("Ernest", "Shackelton"));
-        pers.add(new Person("Olav", "Bjaaland", 70));
-        pers.add(new Person("Helmer", "Hanssen"));
-        pers.add(new Person("Sverre", "Hassel"));
-        pers.add(new Person("Oscar", "Wisting"));
+    public void addMultiple(ObservableList<Person> pers) {
+        ObservableList<Person> tempPers = FXCollections.observableArrayList();
+        tempPers.add(new Person("Robert", "Pery"));
+        tempPers.add(new Person("John", "Franklin"));
+        tempPers.add(new Person("James", "Ross"));
+        tempPers.add(new Person("Robert", "Scott"));
+        tempPers.add(new Person("Umberto", "Noblie"));
+        tempPers.add(new Person("Fredrick", "Cook"));
+        tempPers.add(new Person("Adrian", "Gerlache"));
+        tempPers.add(new Person("Ernest", "Shackelton"));
+        tempPers.add(new Person("Olav", "Bjaaland", 70));
+        tempPers.add(new Person("Helmer", "Hanssen"));
+        tempPers.add(new Person("Sverre", "Hassel"));
+        tempPers.add(new Person("Oscar", "Wisting"));
+        pers.addAll(tempPers);
     }
 }
