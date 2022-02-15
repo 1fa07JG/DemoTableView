@@ -4,23 +4,21 @@ import com.example.demotableview.Person;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 
 public class ObsarvableListPlayground {
     public static void main(String[] args) {
+
         ObservableList<Person> ol= FXCollections.observableArrayList();
         ol.addListener(new ListChangeListener<Person>() {
             @Override
             public void onChanged(Change<? extends Person> c) {
-                System.out.println("Es wurde etwas ");
+                System.out.print("Es wurde etwas ");
                 while (c.next()){
-                    if (c.wasAdded()){
-                        System.out.println("Hinzugefügt");
-                    }
-                    if (c.wasReplaced()){System.out.print("Ersetz");}
-                    if (c.wasRemoved()){System.out.println("Entfernet");}
-                    if (c.wasUpdated()){System.out.println("Aktualisirt");}
-                    if (c.wasPermutated()){System.out.println("Kombinirt");}
+                    if (c.wasAdded()){System.out.print("Hinzugefügt\n");}
+                    if (c.wasReplaced()){System.out.print("Ersetzt\n");}
+                    if (c.wasRemoved()){System.out.print("Entfernt\n");}
+                    if (c.wasUpdated()){System.out.print("Aktualisiert\n");}
+                    if (c.wasPermutated()){System.out.print("Kombiniert\n");}
                 }
             }
 
@@ -32,28 +30,38 @@ public class ObsarvableListPlayground {
         System.out.println("Fridtjof Nansen hinzugefügt");
         ol.add(new Person("Otto", "Sverdrup"));
         System.out.println("Otto Sverdrup hinzugefügt");
-        addAll(ol);
+        addMultiple(ol);
         System.out.println("Es wurde eine Liste von Personen hinzugefügt");
         ol.get(5).setFirstname("John");
         System.out.println("Es wurde ein name Geändert");
         ol.remove(4);
-        ol.removeAll();
+        ol.removeAll(ol);
+        printOl(ol);
 
     }
 
-    public static void addAll(ObservableList<Person> pers) {
-        pers.add(new Person("Robert", "Pery"));
-        pers.add(new Person("John", "Franklin"));
-        pers.add(new Person("James", "Ross"));
-        pers.add(new Person("Robert", "Scott"));
-        pers.add(new Person("Umberto", "Noblie"));
-        pers.add(new Person("Fredrick", "Cook"));
-        pers.add(new Person("Adrian", "Gerlache"));
-        pers.add(new Person("Ernest", "Shackelton"));
-        pers.add(new Person("Olav", "Bjaaland", 70));
-        pers.add(new Person("Helmer", "Hanssen"));
-        pers.add(new Person("Sverre", "Hassel"));
-        pers.add(new Person("Oscar", "Wisting"));
+    private static void printOl(ObservableList<Person> ol) {
+        for (Person p: ol
+             ) {
+            System.out.println(p.toString());
+        }
+    }
+
+    public static void addMultiple(ObservableList<Person> pers) {
+        ObservableList<Person> tempPers = FXCollections.observableArrayList();
+        tempPers.add(new Person("Robert", "Pery"));
+        tempPers.add(new Person("John", "Franklin"));
+        tempPers.add(new Person("James", "Ross"));
+        tempPers.add(new Person("Robert", "Scott"));
+        tempPers.add(new Person("Umberto", "Noblie"));
+        tempPers.add(new Person("Fredrick", "Cook"));
+        tempPers.add(new Person("Adrian", "Gerlache"));
+        tempPers.add(new Person("Ernest", "Shackelton"));
+        tempPers.add(new Person("Olav", "Bjaaland", 70));
+        tempPers.add(new Person("Helmer", "Hanssen"));
+        tempPers.add(new Person("Sverre", "Hassel"));
+        tempPers.add(new Person("Oscar", "Wisting"));
+        pers.addAll(tempPers);
     }
 
 }
