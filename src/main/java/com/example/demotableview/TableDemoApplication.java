@@ -43,7 +43,6 @@ public class TableDemoApplication extends Application {
             }
         });
 
-
         HBox hBox0 = new HBox();
 
         HBox hBox1 = gethBox1(tableView, hBox0);
@@ -178,18 +177,9 @@ public class TableDemoApplication extends Application {
                 tableView.getItems().removeAll(selected);
             }
         });
-        Button sort = new Button("Sortieren");
 
-        sort.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                System.out.println("Button Sort was clicked");
-                ObservableList selected = tableView.getSelectionModel().getSelectedCells();
-                selected.sort
-                tableView.getItems().removeAll(selected);
-                tableView.getItems().addAll(selected);
-            }
-        });
+
+
         Button print = new Button("Ausdrucken");
         print.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -203,7 +193,7 @@ public class TableDemoApplication extends Application {
                 }
             }
         });
-        hBox1.getChildren().addAll(add, delete, print,sort);
+        hBox1.getChildren().addAll(add, delete, print);
         return hBox1;
     }
 
