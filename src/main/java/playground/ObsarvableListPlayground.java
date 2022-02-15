@@ -1,5 +1,6 @@
-package com.example.demotableview;
+package playground;
 
+import com.example.demotableview.Person;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

@@ -5,4 +5,6 @@ module com.example.demotableview {
 
     opens com.example.demotableview to javafx.fxml;
     exports com.example.demotableview;
+    exports playground;
+    opens playground to javafx.fxml;
 }

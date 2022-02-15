@@ -1,4 +1,4 @@
-package com.example.demotableview;
+package playground;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
